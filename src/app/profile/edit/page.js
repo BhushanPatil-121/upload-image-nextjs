@@ -2,21 +2,38 @@
 import Image from "next/image";
 import Link from "next/link";
 import style from "./page.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 
 
 export default function Edit({searchParams}) {
 
-  console.log(searchParams);
+  useEffect(()=>{
+    const fetchData = async()=>{
+      let userData=await getData(id);
+      let data=userData.result;
+      setNewName(data.name)
+      setNewCity(data.city)
+      setNewHeading(data.heading)
+      setPreview(data.avatar)
+    }
+    fetchData();
+  }, [])
 
+  let id = searchParams.id;
+  // console.log(searchParams);
+  const getData = async(id) => {
+    let data = await fetch(`/api/${id}`,{caches:"no-store"});
+    data = await data.json();
+   return data;
+}
   let router = useRouter();
   const updateData = async (newData) => {
     let data = await fetch("/api", {
       method: "PUT",
       body: JSON.stringify(newData),
-    });
+    },{caches:"no-store"});
     data = await data.json();
     if (data.success) {
       alert("Profile Updated Successfuly.");
@@ -27,10 +44,10 @@ export default function Edit({searchParams}) {
   };
 
   const [newImage, setNewImage] = useState();
-  const [newName, setNewName] = useState(searchParams.name);
-  const [newCity, setNewCity] = useState(searchParams.city);
-  const [newHeading, setNewHeading] = useState(searchParams.heading);
-  const [preview, setPreview] = useState(searchParams.avatar);
+  const [newName, setNewName] = useState("");
+  const [newCity, setNewCity] = useState("");
+  const [newHeading, setNewHeading] = useState("");
+  const [preview, setPreview] = useState("");
   const imageChange = (e) => {
     const file = e.target.files[0];
     // const fileType = file["type"];
@@ -58,13 +75,13 @@ export default function Edit({searchParams}) {
   return (
     <div>
       <div className={style.cardContainer}>
-        <Image
+        {preview?<Image
           className={style.round}
           width={150}
           height={150}
           src={preview}
           alt="user"
-        />
+        />:<h2>Loading Image</h2>}
         <br />
         <div className={style.inputImg}>
           {/* <form onSubmit={update} method="Put" > */}
