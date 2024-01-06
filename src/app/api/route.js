@@ -7,6 +7,7 @@ export async function GET() {
   return NextResponse.json({ result: user });
 }
 
+
 export async function PUT(req, res) {
   const newData =await req.json();
   try {
