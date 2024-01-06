@@ -16,10 +16,16 @@ export default async function Profile() {
   // console.log(user);
   const imageSrc= im;
   // console.log(imageSrc);
+  const sendData={id:user.id,
+    name: user.name,
+    city: user.city,
+    heading: user.heading,
+    avatar:imageSrc}
   return (
     <main>
       <div className={style.cardContainer}>
         <div className={style.buttons}>
+          <button className={style.primary}>
           <Link
             href={{
               pathname: "/profile/edit",
@@ -29,12 +35,8 @@ export default async function Profile() {
                 heading: user.heading,
                 avatar:imageSrc
               },
-            }}
-          >
-            <button className={style.primary}>
-              <EditIcon fontSize="small" />
+            }} ><EditIcon fontSize="small" /> </Link>
             </button>
-          </Link>
         </div>
         <Image
           className={style.round}

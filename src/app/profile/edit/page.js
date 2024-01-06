@@ -5,8 +5,11 @@ import style from "./page.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Edit({ searchParams }) {
-  // console.log(searchParams);
+
+
+export default function Edit({searchParams}) {
+
+  console.log(searchParams);
 
   let router = useRouter();
   const updateData = async (newData) => {
@@ -113,7 +116,7 @@ export default function Edit({ searchParams }) {
           <button className={style.primary1} onClick={update}>
             SAVE
           </button>
-          <Link href={"/"}>
+          <Link href={"/profile"}>
             <button className={style.primary2}>BACK</button>
           </Link>
           {/* </form> */}
