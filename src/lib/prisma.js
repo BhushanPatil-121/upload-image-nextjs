@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 
-let prisma = new PrismaClient({
+let prisma = new PrismaClient({       
   datasources: {
     db: {
       url: 'postgresql://postgres:postgres@postgres-container:5432/profile-db',
