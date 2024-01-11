@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:18-bullseye
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm cache clean --force
