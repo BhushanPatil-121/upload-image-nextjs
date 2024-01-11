@@ -1,0 +1,11 @@
+stages:
+    - build
+build-job:
+    stage:
+        - build
+    tags:
+        - shell01
+    script:
+        - echo "creating the docker container"
+        - docker build -t nextjs-image .
+        - docker run -p 3000:3010 nextjs-image !reference 
