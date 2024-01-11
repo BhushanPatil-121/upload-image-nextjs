@@ -1,9 +1,7 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-module.exports = {
-  images: {
-    domains: ["randomuser.me"],
-  },
-  
+const nextConfig = {
+  reactStrictMode:true,
+  output:'standalone'
 };
+
+module.exports = nextConfig;

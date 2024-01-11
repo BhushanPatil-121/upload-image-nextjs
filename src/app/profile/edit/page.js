@@ -1,39 +1,50 @@
 "use client";
 import Image from "next/image";
+import EditIcon from "@mui/icons-material/Edit";
+
 import Link from "next/link";
 import style from "./page.module.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { DeleteOutline } from "@mui/icons-material";
+import { red } from "@mui/material/colors";
 
+export default function Edit({ searchParams }) {
+  useEffect(() => {
+    const fetchData = async () => {
+      let userData = await getData(id);
 
-
-export default function Edit({searchParams}) {
-
-  useEffect(()=>{
-    const fetchData = async()=>{
-      let userData=await getData(id);
-      let data=userData.result;
-      setNewName(data.name)
-      setNewCity(data.city)
-      setNewHeading(data.heading)
-      setPreview(data.avatar)
-    }
+      let data = userData.result;
+      setNewName(data.name);
+      setNewCity(data.city);
+      setNewHeading(data.heading);
+      setPreview(data.avatar);
+    };
     fetchData();
-  }, [])
+  }, []);
 
   let id = searchParams.id;
   // console.log(searchParams);
-  const getData = async(id) => {
-    let data = await fetch(`/api/${id}`,{caches:"no-store"});
+  const getData = async (id) => {
+    let data = await fetch(`/api/${id}`, { caches: "no-store" });
     data = await data.json();
-   return data;
-}
+    if (data.success) {
+      console.log("true");
+    } else {
+      router.push("/");
+    }
+    return data;
+  };
   let router = useRouter();
   const updateData = async (newData) => {
-    let data = await fetch("/api", {
-      method: "PUT",
-      body: JSON.stringify(newData),
-    },{caches:"no-store"});
+    let data = await fetch(
+      "/api",
+      {
+        method: "PUT",
+        body: JSON.stringify(newData),
+      },
+      { caches: "no-store" }
+    );
     data = await data.json();
     if (data.success) {
       alert("Profile Updated Successfuly.");
@@ -53,7 +64,7 @@ export default function Edit({searchParams}) {
     // const fileType = file["type"];
     // const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
     // if (!validImageTypes.includes(fileType)) {
-      setPreview(URL.createObjectURL(file))
+    setPreview(URL.createObjectURL(file));
     // }
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -72,16 +83,52 @@ export default function Edit({searchParams}) {
     console.log(newData);
     updateData(newData);
   };
+  const handleClick= async()=>{
+    let text = "Press OK to Delete";
+    if (confirm(text) == true) {
+      // const deleteData = async (id) => {
+        let data = await fetch(`/api/${id}`, { 
+          method:"Delete",
+          body:JSON.stringify({id})
+         });
+        data = await data.json();
+        if (data.success) {
+          alert("Profile Deleted!");
+          router.push("/")
+        } else {
+          alert("Error !");
+        }
+      
+    } else {
+      alert("You canceled!");
+    }
+  }
   return (
     <div>
       <div className={style.cardContainer}>
-        {preview?<Image
-          className={style.round}
-          width={150}
-          height={150}
-          src={preview}
-          alt="user"
-        />:<h2>Loading Image</h2>}
+      <div className={style.buttons}>
+          <button className={style.primary} onClick={handleClick}>
+          <DeleteOutline sx={{color: red[500]}} fontSize="small" /> 
+            </button>
+        </div>
+        {preview ? (
+          <Image
+            className={style.round}
+            width={150}
+            height={150}
+            src={preview}
+            alt="user"
+          />
+        ) : (
+          <Image
+            className={style.round}
+            width={150}
+            height={150}
+            src="/loading.png"
+            alt="user"
+            priority
+          />
+        )}
         <br />
         <div className={style.inputImg}>
           {/* <form onSubmit={update} method="Put" > */}
@@ -131,7 +178,7 @@ export default function Edit({searchParams}) {
           </label>
           <br />
           <button className={style.primary1} onClick={update}>
-            SAVE
+            UPDATE
           </button>
           <Link href={"/profile"}>
             <button className={style.primary2}>BACK</button>
