@@ -1,8 +1,8 @@
 stages:
-    - build
+    - "build"
+
 build-job:
-    stage:
-        - build
+    stage: build
     tags:
         - shell01
     script:
