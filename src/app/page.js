@@ -24,7 +24,6 @@ export default async function Home() {
       await new Promise(res=>setTimeout(res, 10000))
     }
   }
-  // console.log(data.length>0);
-  // if(data)
+
  
 }

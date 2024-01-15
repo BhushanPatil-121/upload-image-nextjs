@@ -29,12 +29,23 @@ export default function Create({ searchParams }) {
   const imageChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
-    setPreview(URL.createObjectURL(file));
-
-    reader.onloadend = () => {
-      setNewImage(reader.result);
-    };
     reader.readAsDataURL(file);
+    reader.onload = function (e)  {
+      const imageElement =document.createElement("img");
+      imageElement.src= e.target.result;
+      imageElement.onload = function(e){
+        const canvas = document.createElement("canvas");
+        const MAX_WITDH = 150;
+        const scaleSize= MAX_WITDH / e.target.width;
+        canvas.width = MAX_WITDH;
+        canvas.height= e.target.height*scaleSize;
+        const context = canvas.getContext("2d");
+        context.drawImage(e.target, 0 ,0 , canvas.width, canvas.height)
+        const newBase64= canvas.toDataURL("image/*") 
+        setPreview(newBase64);
+        setNewImage(newBase64);
+      }
+    };
   };
   const update = () => {
     let newData = {
@@ -43,7 +54,7 @@ export default function Create({ searchParams }) {
       heading: newHeading,
       avatar: newImage,
     };
-    console.log(newData);
+    console.log(newData.avatar);
     updateData(newData);
   };
   return (
@@ -51,8 +62,8 @@ export default function Create({ searchParams }) {
       <div className={style.cardContainer}>
         <Image
           className={style.round}
-          width={150}
-          height={150}
+          width={130}
+          height={130}
           src={preview}
           alt="user"
         />
