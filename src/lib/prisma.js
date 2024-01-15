@@ -1,6 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 
-let prisma;
+
+let prisma = new PrismaClient({       
+  datasources: {
+    db: {
+      url: 'postgresql://postgres:postgres@postgres-container:5432/profile-db',
+    },
+  },      
+});
 if(process.env.NODE_ENV === 'production'){
   prisma= new PrismaClient()
 }else{
