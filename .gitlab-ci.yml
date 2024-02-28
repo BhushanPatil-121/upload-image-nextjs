@@ -45,4 +45,3 @@ sonarqube-vulnerability-report:
     #   - ""
   dependencies:
     - sonarqube-check
-
