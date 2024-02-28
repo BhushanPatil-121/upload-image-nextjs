@@ -31,6 +31,7 @@ sonarqube-vulnerability-report:
     - Docker1
   script:
     - 'curl -u "${SONAR_TOKEN}:" "${SONAR_HOST_URL}/api/issues/gitlab_sast_export?projectKey=firstdemogitlab1_upload_profile_a6a89c12-8e40-4ae3-9795-dedd1cd759e5&branch=${CI_COMMIT_BRANCH}&pullRequest=${CI_MERGE_REQUEST_IID}" -o gl-sast-sonar-report.json'
+    - sonar-scanner > sonarqube-report.txt
   allow_failure: true
   only:
     - merge_requests
@@ -41,7 +42,7 @@ sonarqube-vulnerability-report:
     expire_in: 1 day
     reports:
       sast: gl-sast-sonar-report.json
-    # paths:
-    #   - ""
+    paths:
+      - sonarqube-report.json
   dependencies:
     - sonarqube-check
